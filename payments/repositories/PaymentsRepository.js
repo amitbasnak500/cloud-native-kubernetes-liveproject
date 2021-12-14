@@ -1,4 +1,5 @@
 const domain = require('../domain/PaymentDetails')
+const logger = require('pino')()
 
 let paymentMethodKey = "payment"
 
@@ -10,6 +11,7 @@ class PaymentsRepository {
     async addOrReplacePaymentMethod(paymentMethod) {
 
         let len = await this.client.hlen(paymentMethodKey)
+        logger.info(len)
         
         if(len > 0) {
             // If there is already an existing payment method, we're
@@ -19,11 +21,13 @@ class PaymentsRepository {
         }
 
         const data = this.transformToRepositoryFormat(paymentMethod)
+        logger.info(data)
         await this.client.hmset(paymentMethodKey, data)
     }
 
     async getPaymentMethod() {
         let len = await this.client.hlen(paymentMethodKey)
+        logger.info(len)
         
         if(len <= 0) {
             // If there is already an existing payment method, we're
@@ -33,11 +37,13 @@ class PaymentsRepository {
         }
 
         const data = await this.client.hgetall(paymentMethodKey)
+        logger.info(data)
         return this.transformToDomainFormat(data)
     }
 
     async removePaymentMethod() {
         let len = await this.client.hlen(paymentMethodKey)
+        logger.info(len)
         
         if(len <= 0) {
             // If there is already an existing payment method, we're
@@ -47,6 +53,7 @@ class PaymentsRepository {
         }
 
         let fields = await this.client.hkeys(paymentMethodKey)
+        logger.info(fields)
         return await this.client.hdel(paymentMethodKey, fields)
     }
 

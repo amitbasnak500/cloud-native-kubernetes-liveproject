@@ -18,8 +18,20 @@ spec:
       containers:
       - name: redis
         image: redis:6.0.4-alpine
+        args: ["/usr/local/etc/redis/redis.conf"]
         ports:
         - containerPort: 6379
+        resources:
+          requests:
+            cpu: 250m
+            memory: 256Mi
+        volumeMounts:
+          - mountPath: "/usr/local/etc/redis"
+            name: conf
+      volumes:
+        - name: conf
+          secret:
+            secretName: redis-conf
 ---
 apiVersion: v1
 kind: Service

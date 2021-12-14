@@ -13,6 +13,8 @@ module.exports = (config) => {
 
     const client = makeRedisClient(config)
     const paymentsRepo = require('./PaymentsRepository')(client)
+    logger.info(client)
+    logger.info(paymentsRepo)
 
     return {paymentsRepository: paymentsRepo}
 }

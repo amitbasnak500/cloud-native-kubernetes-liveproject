@@ -11,7 +11,7 @@ class PaymentsController {
     async handleGetPaymentMethod(req, res) {
         const pm = await this.paymentRepository.getPaymentMethod()
 
-        if(Object.entries(pm).length == 0) {
+        if(Object.entries(pm).length === 0) {
             res.status(404)
             res.send({"error":"payment method not found"})
             return
